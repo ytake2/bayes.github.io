@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+<style type="text/css">
+.knitr.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+},
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0em 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage.left {
+  text-align: left;
+}
+.rimage.right {
+  text-align: right;
+}
+.rimage.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+		<meta charset="utf-8">
+
+		<title>bayesIntro</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+    <script type="text/javascript"
+    src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+<section data-transition="convex">
+<h1>ベイズ推定の概要</h1>
+<h2>モデリングの楽しみを知る</h2>
+<h3>@広島ベイズ塾</h3>
+<p>
+<small>Created by <a href="https://sites.google.com/site/yoshitake2bayashi/home">Yoshitake TAKEBAYASHI</a> / <a href="https://twitter.com/psycle44">@psycle44</a></small>
+</p>
+</section>
+        
+<section data-transition="convex">
+<section  data-background="funyan02.JPG">
+    <div align="left">
+    <h2>自己紹介</h2>
+    <h4>名前:　竹林由武</h4>
+    <h4>所属:　統計数理研究所</h4>
+    <h4>専門:　疫学、臨床心理学</h4></br>
+    <h4>研究テーマ：</h4>
+    <div style="border-style: solid ; border-width: 1px; padding: 10px 5px 10px 20px; border-color: red; color: green; opacity: 0.8; background-color: black;">
+    <h5>　自殺の時空間疫学</h5>
+    <h5>　小研究数メタ分析</h5>
+    <h5>　ウェルビーイング向上による精神疾患予防</h5>
+    <h5>　猫の気持ち</h5>
+    </div></div>
+</section>
+
+<section>
+    <h2>自殺の時空間疫学</h2>
+    <a href="http://ikiru.ncnp.go.jp/ikiru-hp/genjo/toukei/index.html">http://ikiru.ncnp.go.jp/ikiru-hp/genjo/toukei/index.html</a>
+    <img src="bayes001">
+    <!---  <iframe src="http://127.0.0.1:4663/" height=600 width=3600></iframe>--->
+    </section>
+
+<section>    
+    <h2>少研究数のメタ分析</h2>
+    <p>Noma, H. Statist. Med. 2011, 30 3304–3312</p>
+    <img src="noma.png" style="width:600px; height:400px;">
+    <h3>K=10以下での信頼区間を向上させる</h3>
+</section>
+</section>
+
+<section data-transition="convex" data-background="#4d7e65" data-background-transition="zoom">
+    <h1>Topics</h1>
+    <ul>
+    <h2><li>はじめに</li></h2>
+    <h2><li>推測統計の基本</li></h2>
+    <h2><li>最尤推定とベイズ推定</li></h2>
+    <h2><li>MCMCによるベイズ推定</li></h2>
+    </ul>
+</section>
+
+
+<section data-transition="convex">
+<section data-transition="slide" data-background="bill01.png" style="text-align:left;">
+    <h2></br></h2>
+    <h2></br></h2>
+    <h2></br></h2>
+    <h2></br></h2>
+    <h2></br></h2>
+    <div style="border-style: solid ; border-width: 1px; padding: 10px 5px 10px 20px; border-color: red; color: green; opacity: 0.8; background-color: black;">
+    <h3>21世紀のマイクロソフト社の基本戦略は</h3>
+    <h2><font color=red size="larger">ベイズ</font>テクノロジーである</h2>
+    </div>
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h2>21世紀におけるベイズの発展</h2>
+    <img src="bayes01.png">
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h2>21世紀におけるベイズの発展</h2>
+    <img src="bayes02.png">
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h2>21世紀におけるベイズの発展</h2>
+    <img src="bayes05.png">
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h1>なぜ21世紀？？</h1>
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h2>ベイズ推定では</h2>
+    <h2>膨大な反復計算が必要</h2>
+    <h2>PCの処理性能の向上でベイズ推定が実用的に!!</h2>
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h2>ベイズ推定のメリット</h2>
+    <h3>複雑なモデルを推定可能</h3>
+    <h3>少サンプル数でも推定可能</h3>
+    <h3>従来型の推定法も表現可能</h3>
+    <h2></h2>
+    <h2></h2>
+</section>
+
+<section data-transition="slide" style="text-align:left;">
+    <h3>要するに</h3>
+    <h1>めっちゃ便利!!</h1>
+    <h3>使えると解析の幅が広がる</h3>
+</section>
+</section>
+
+
+<section data-transition="convex">
+<section data-transition="slide">
+    <h3>ベイズ推定を始める前に....</h3>
+    <h1>推測統計学のおさらい</h1>
+</section>
+
+<section data-transition="slide">
+<h3>ある地域での模試の得点の分布</h3>
+<div class="chunk" id="unnamed-chunk-1"><div class="rimage default"><img src="figure/unnamed-chunk-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div></div>
+<h3>関心:日本全体での分布が知りたい</h3>
+</section>
+
+<section data-transition="slide">
+<h2>日本全体での模試得点の分布</h2>
+<div style="top:150px;left:50px;position:absolute;text-align:left;z-index:2;">
+<h3>
+統計モデル:正規分布</br></br>
+</h3>
+<p>$$N(θ,σ^2)$$</p>
+</br>
+</div>
+
+
+<div style="top:450px;left:50px;position:absolute;text-align:left;z-index:2;">
+<p>$$\
+f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-θ)^2}{2\sigma^2}}
+$$</br>
+平均(mu)と分散(σ^2)</br>
+で分布の型が決まる
+</p>
+</div>
+
+<div style="top:250px;left:550px;position:absolute;width:450px;height:500px; z-index:1;">
+<div class="chunk" id="unnamed-chunk-2"><div class="rimage default"><img src="figure/unnamed-chunk-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div></div>
+</div>
+</section>
+
+
+<section data-transition="slide">
+<h2>統計的推測</h2>
+<div style="top:120px;left:70px;position:absolute;text-align:left;z-index:2;">
+<h5><font color="black">得られたデータ</br>　　(D)</font></h5>
+</div>
+<div style="top:430px;left:70px;position:absolute;text-align:left;z-index:2;">
+<h5>統計モデル</h5>
+\begin{equation}
+f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-θ)^2}{2\sigma^2}}
+\end{equation}</br>
+</div>
+<div style="top:100px;left:50px;position:absolute;width:300px;height:300px; z-index:1;">
+<div class="chunk" id="unnamed-chunk-3"><div class="rimage default"><img src="figure/unnamed-chunk-3.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div></div>
+</div>
+<div style="top:400px;left:50px;position:absolute;width:300px;height:300px; z-index:1;">
+<div class="chunk" id="unnamed-chunk-4"><div class="rimage default"><img src="figure/unnamed-chunk-4.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div></div>
+</div>
+<div style="top:150px;left:480px;position:absolute;width:450px;height:500px; z-index:1;">
+<div class="chunk" id="unnamed-chunk-5"><div class="rimage default"><img src="figure/unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" class="plot" /></div></div>
+</div>
+<div style="top:620px;left: 420px; position:absolute;z-index:2;">
+<h5>データに最もフィットする</br>
+統計モデルのパラメータを探す</h5>
+</div>
+</section>
+
+<section data-transition="slide">
+<h1>データの分布型は多様</h1>
+<h4>データにフィットする分布設定が</h4>
+<h4>統計モデリングの要</h4>
+</section>
+<section>
+<h3>様々な分布を知るために</h3>
+<a href="https://ksmzn.shinyapps.io/statdist/">https://ksmzn.shinyapps.io/statdist/</a>
+<img src="bayes004.png">
+<!---
+<iframe src="https://ksmzn.shinyapps.io/statdist/" height=600 width=3600>
+--->
+</iframe>
+</section>
+</section>
+
+
+<section data-transition="convex">
+<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+<h1>最尤推定とベイズ推定</h1>
+<h4>どちらもパラメータ推定法だけど...</h4>
+</section>
+
+<section data-transition="slide" data-background-transition="zoom">
+<div style="text-align:left;">
+<h3>最尤推定法の発想</h3>
+<p>
+P(D|θ)が最大になるθを推定する</br>
+P(D|θ)=ある<font color="red"><B>母数(θ)</B></font>の下で<font color="yellow"><B>データ(D)</B></font>が得られる確率</br></br>
+</p>
+
+<h3>ベイズ推定法の発想</h3>
+<p>
+P(θ|D)を推定する</br>
+P(θ|D)=ある<font color="yellow"><B>データ(D)</B></font>の下で<font color="red"><B>母数(θ)</B></font>が得られる確率</br>
+</p>
+</div>
+</section>
+
+
+<section data-transition="slide">
+<h3>最尤推定法の発想</h3>
+<p>P(D|θ)が最大になるθを推定する</p>
+<img src="bayes03.png">
+</section>
+
+<section data-transition="slide">
+<h3>最尤推定法の発想</h3>
+<p>信頼区間の意味</p>
+<div style="top:300px;left:300px;position:absolute; width:800px;height:700px;z-index:2;">
+<img src="ConfInt.svg">
+</div>
+<div style="top:200px;left:30px;position:absolute; width:500px;height:600px;z-index:2;">
+<img src="credInt.jpg">
+</div>
+<div style="top:500px;position:absolute;z-index:1;">
+<p><font color="yellow">何度も観測を繰り返せば</font></br>
+95%の確率で真値がこの範囲に入る</p>
+<p>真値は一定で観測が確率的に変動する</p></div>
+</section>
+
+<section data-transition="slide">
+<h3>ベイズ法の発想</h3>
+<p>P(θ|D)を推定する</p>
+<img src="bayes04.png">
+</section>
+
+<section data-transition="slide">
+<h3>ベイズ法の発想</h3>
+<p>信用区間の意味</p>
+<div style="left:100px; position:absolute; width:600px;height:500px;z-index:2;">
+<img src="credInt.jpg"></div>
+<div style="top:600px;left:250; position:absolute;z-index:1;">
+<p><font color="yellow">仮に真の値を仮定するなら</font></p>
+<p>真値は95%の確率でこの範囲に入る</p></div>
+</section>
+
+<section data-transition="slide">
+<h2>P(θ|D)はどう求めるのか？</h2>
+<h4>ここに</h4></br>
+<h3>ベイズの定理が使われる</h3>
+</section>
+</section>
+
+
+<section data-transition="convex">
+<section data-transition="slide" data-background="bayesT.jpg">
+<h1></h1></br>
+<h1></h1></br>
+<h1></h1></br>
+<h1></h1></br>
+<h1></h1></br>
+<h1></h1></br>
+<h1></h1></br>
+<h1></h1></br>
+<h1>ベイズの定理</h>
+</section>
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>　</h3>
+<img src="bayes06.png">
+</section>
+
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>パラメータ推定に応用</h3>
+<img src="bayes070.png">
+</section>
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>パラメータ推定に応用</h3>
+<img src="bayes07.png">
+</section>
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>パラメータ推定に応用</h3>
+<img src="bayes08.png">
+</section>
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>パラメータ推定に応用</h3>
+<img src="bayes09.png">
+</section>
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>パラメータ推定に応用</h3>
+<img src="bayes10.png">
+</section>
+
+<section data-transition="none">
+<h3>ベイズの定理</h3>
+<h3>パラメータ推定に応用</h3>
+<img src="bayes11.png">
+</section>
+
+
+<section data-transition="none">
+<h3>事前分布..???</h3>
+<h3>データに依存せずにθが起こる確率..???</h3>
+</section>
+
+<section data-transition="none" style="text-align:left;">
+<h2>事前分布</h2></br>
+<ul>
+<h3><li>データ取得前のθの分布に関する情報</li></h3>
+<h3><li>研究者の仮説、先行研究、主観</li></h3>
+<h3><li>データから決める方法もある(客観ベイズ)</li></h3>
+</ul>
+</section>
+
+<section data-transition="none">
+<h3>事前情報がない場合</h3>
+<img src="bayes12.png">
+<div style="top:300px;left:70px;position:absolute;text-align:left;z-index:2;">
+<h5>パラメータ推定に</br>尤度のみ使用</h5></div>
+<h4>最尤推定と同様の推定結果になる</h4>
+<h4>※推定するパラメータは分布する</h4>
+</section>
+
+<section data-transition="none">
+<h2>ベイズ推定の特徴</h2>
+<div style="text-align:left;">
+<h3>パラメータの<font color="yellow">分布</font>を推定</h3>
+<h3>尤度に加えて<font color="yellow">事前分布</font>を推定に使用する</h3></div>
+<h3>要はこれだけ</h3>
+</section>
+</section>
+
+
+<section data-transition="convex" data-background-transition="zoom">
+<section data-transition="none">
+<h1>MCMCによる</br>ベイズ推定</h1>
+</section>
+
+<section data-transition="none">
+<h1>MCMC</h1>
+<p><font color="yellow">M</font>arcov<font color="yellow">C</font>hain<font color="yellow">M</font>onte<font color="yellow">C</font>arlo Methods</p>
+<h2>マルコフ連鎖モンテカルロ法</h2>
+</section>
+
+<section data-transition="none" style="text-align:left;">
+<h2><font color="yellow">マルコフ連鎖</font><font color="red">モンテカルロ法</font></h2>
+<h3><font color="yellow">移動の方向が一つ前の状態に基づいて決まるルール</font>を付与した
+<font color="red">乱数シミュレーション</font>によってパラメータの分布を生成する方法</h3>
+</section>
+
+<section data-transition="none" style="text-align:left;">
+<h2>なぜベイズ推定にMCMC??</h2></br>
+<h3>パラメータの分布を得るのに適してる</h3>
+<h3>解析的に解けないパラメータの分布を</br>
+近似的に求められる</h3>
+</section>
+
+<section data-transition="none">
+<h2>MCMCの代表</h2>
+<h3>メトロポリスヘイスティング法</h3>
+<h3>ギブスサンプリングもその一種</h3>
+<aside class="notes">
+ちなみにStanはHamiltonion Monte Carlo SamplingとNo-UTurn-Sampling
+モンテカルロ法だけなのでStanはMCMCではなくMCサンプラーと呼ばれるらしい
+</aside>
+</section>
+
+<section data-transition="none" style="text-align: left;">
+<h1>ギブスサンプリング</h1></br>
+<p>
+step1: x1の初期値を指定する</br>
+step2: x2を初期値で固定し, x1をサンプリング</br>
+step3: x1をstep2の値に固定し, x2をサンプリング</br>
+step4: x2をstep3の値に固定して, x1をサンプリング</br>
+以下、 step3,4を繰り返す。
+</p>
+</section>
+
+<section> 
+<h2>なるほどよくわからん</h2>
+<p><a href="http://visualize-mcmc.appspot.com/3_gibbs.html">アニメーションで見てみましょう</a></p>
+<a href="http://visualize-mcmc.appspot.com/3_gibbs.html"><img src="gibbs.png"></a>
+</section>
+
+<section> 
+<h2>片方のパラメータで見ると...</h2>
+<img src="bayes22.png">
+</section>
+
+<section data-transition="none">
+<p>MCMCによるサンプリングが適切であれば</br>定常分布に収束する</p>
+<img src="bayes23.png" style="top: 150px; width:700px;height:500px;">
+<p>定常分布: 初期値を変えても必ず同一の分布に達する</p>
+</section>
+
+<section data-transition="none">
+<h2>Burnin区間 Warm-up期間</h2>
+<p>サンプリング初期は不安定なので推定に使わない</p>
+<img src="bayes20.png" style="top:150px; left:450; width:300px: height: 400px;z-index:1;">
+<p>stanはデフォルトで半分捨てる</p>
+</section>
+
+<section data-background="", style="text-align: left;">
+<h2>収束の診断指標</h2>
+<font color="#4d7e65">
+<ul><li><h3>Gelman & Rubinの指標</h3></li>
+<li><h3>Gewekeの指標</h3></li>
+<li><h3>自己相関</h3></li>
+</font>
+</section>
+
+
+<section>
+<h2>Gelman & Rubinの指標</h2>
+<div style="top:100px;left:400px;position:absolute; z-index:1;">
+<div class="chunk" id="unnamed-chunk-6"><div class="rimage default"><img src="figure/unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div></div>
+</div>
+<div style="top:150px;left:10px;position:absolute;width:500px;height:400px; text-align:left; z-index:2;">
+<p>1.01を越えなければ良い</p>
+<p>chain間の分散がchain内の分散より小さいと1に近づく</p>
+<p>chain間の差を検討</p>
+</div>
+</section>
+
+
+<section data-background="">
+<h3>Gewekeの指標</h3>
+<div style="top:200px;left:200px;position:absolute; width:500px;height:600px;z-index:1;">
+<div class="chunk" id="unnamed-chunk-7"><div class="rimage default"><img src="figure/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div></div>
+</div>
+<p>MCMCの最初の方と最後の方の平均に差がないか検定
+Z値が±1.96以内に入っていれば差はない→収束してる
+</p>
+</section>
+
+<section data-background="">
+<h3>自己相関</h3>
+<div style="top:200px;left:200px;position:absolute; width:500px;height:600px;z-index:2;">
+<div class="chunk" id="unnamed-chunk-8"><div class="rimage default"><img src="figure/unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" class="plot" /></div></div>
+</div>
+<p>自己相関が5を超えると良くない
+</p>
+</section>
+</section>
+
+<section>
+<section data-transition="convex" data-background-transition="zoom">
+<h2>MCMCによるベイズ推定</h2>
+</section>
+
+<section style="text-align: left">
+<h2>MCMCによる推定の手順</h2>
+<h3>
+<p>①データを表現する統計モデルの記述</br>
+②パラメータの事前分布を設定</br>
+③MCMCの実行</br>
+④収束診断</br>
+⑤事後分布の解釈</p></h3>
+</section>
+
+<section>
+<h2>回帰モデルの推定</h2>
+<h3>①データを表現する統計モデルの記述</h3></br>
+<p>$$f(Y)=α+βX+ε$$</p></br>
+<p>Yは正規分布</p><p>$$f(Y)=N(α+βX,ε)$$</p>
+</section>
+
+<section>
+<h3>②パラメータ事前分布の設定</h3>
+<p>αとβの分布について情報なし</p> 
+<div style="left: 300px;width:500px;height:600px;z-index:2;">
+<img src="bayes26.png"><div>
+<div style="left: 30px;width:200px;z-index:1;">
+<p>$$N(0,100)$$</br>分散が大きい分布を指定</p></div>
+</section>
+
+<section>
+<h2>回帰モデルの推定</h2>
+<h3>③MCMCのセッティング</h3>
+<ul><p><li>収束回数</li></p>
+<p><li>chainの数</li></p>
+<p><li>burin区間</li></p>
+<p><li>thin(間引き数)</li></p></ul>
+</section>
+
+<section>
+<h2>MCMCで回帰モデルの推定</h2>
+\begin{equation}
+f(Y)=α+βX+ε
+\end{equation}</br>
+<pre>
+<code data-trim contenteditable>
+library(rstan)
+N <- 500
+x <- rnorm(N, mean = 50, sd = 10)
+y <- 10 + 0.8 * x + rnorm(N, mean =0, sd = 7)
+
+stancode <- '
+  data{ int<lower=0> N; 
+        real x[N]; 
+        real y[N]; 
+        }  
+  parameters { real alpha; 
+               real beta; 
+              real<lower=0> s;
+              }
+  model{ for(i in 1:N) 
+          y[i] ~ normal(alpha + beta * x[i], s); #推定するモデル
+          alpha ~ normal(0, 100); #パラメータの事前分布
+          beta ~ normal(0, 100);  #パラメータの事前分布
+          s ~ inv_gamma(0.001, 0.001);
+          }
+'
+
+</code>
+</pre>
+<a href="http://qiita.com/hoxo_m/items/ad4ffb091aec535f3125">
+<p>世界で二番目に簡単なStanコード</p></a>
+</section>
+
+<section data-transition="none">
+<pre>
+<code data-trim contenteditable>
+datastan <- list(N=N, x=x, y=y)
+fit <- stan(model_code = stancode,data=datastan,iter=5000,chain=4)
+
+my_shinystan <- as.shinystan(fit)
+launch_shinystan(my_shinystan)
+</code>
+</pre>
+<p><a href="http://127.0.0.1:3858">推定結果を見てみよう</br>
+On the shinyRStan</a></p> 
+</section>
+
+<section>
+<h3>shinyStanの例</h3>
+<img src="bayes16.png">
+<p>事後分布・自己相関</p>
+<p>トレースプロット</p>
+</section>
+
+
+<section>
+<h2>事後分布の要約統計</h2>
+<img src="bayes15.png">
+<h3>平均・標準偏差・信用区間</h3>
+</section>
+
+<section>
+<h2>論文ではこんな風に報告</h2>
+<img src="bayes19.png">
+<a href=""><p>ベイズ推定の報告の仕方</p></a>
+</section>
+</section>
+
+
+<section>
+
+<section>
+<h1>ベイズ推定が生きる</h1>
+<h1>研究例</h1>
+</section>
+
+
+<section>
+<h1>小症例数での推定</h1>
+</section>
+
+<section>
+<h1>因子分析</h1>
+</section>
+
+<section>
+<h1>複雑なモデルの推定</h1>
+</section>
+
+
+<section>
+<h1>まとめ</h1>
+</section>
+
+</section>
+
+
+<section style="text-align: left;">
+<h1>Enjoy!!</h1>
+</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
